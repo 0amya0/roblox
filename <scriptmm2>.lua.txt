@@ -1,0 +1,54 @@
+local executor = script.Parent  
+local players = game:GetService("Players")
+
+local function teleportToCoin(player)  
+    local coin = game.Workspace.Coins  
+    local coinDistance = math.huge  
+    local closestCoin = nil
+
+    for _, v in pairs(coin:GetChildren()) do  
+        local distance = (player.Character.HumanoidRootPart.Position - v.Position).magnitude
+
+        if distance < coinDistance then  
+            coinDistance = distance  
+            closestCoin = v  
+        end  
+    end
+
+    local coilAnim = Instance.new("Animation")  
+    coilAnim.AnimationId = "rbxassetid://..."
+
+    player.Character.Humanoid:LoadAnimation(coilAnim)  
+    player.Character.Humanoid:Play()  
+    wait(0.5)  
+    player.Character.Humanoid:Stop()
+
+    local teleport = Instance.new("LocalScript")  
+    teleport.Parent = game.Workspace  
+    teleport.Source = closestCoin  
+    teleport.Name = "CoinTeleport"
+
+    wait(0.5)  
+    teleport:Destroy()  
+end
+
+for _, player in pairs(players:GetPlayers()) do  
+    if player.Name == executor.Properties.PlayerName then  
+        local frame = Instance.new("Frame")  
+        frame.Name = "CoinFarm"  
+        frame.Size = UDim2.new(0, 50, 0, 50)  
+        frame.Position = UDim2.new(0, 100, 0, 100)  
+        frame.Parent = player.PlayerGui.ScreenGui
+
+        local button = Instance.new("TextButton")  
+        button.Name = "FarmCoins"  
+        button.Size = UDim2.new(0, 50, 0, 25)  
+        button.Position = UDim2.new(0, 0, 0, 0)  
+        button.Text = "Farm Coins"  
+        button.Parent = frame
+
+        button.MouseButton1Click:Connect(function()  
+            teleportToCoin(player)  
+        end)  
+    end  
+end  
